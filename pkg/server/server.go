@@ -249,7 +249,7 @@ func NewServer(o *Options) (*Server, error) {
 
 // Sync ...
 func (s *Server) Sync() {
-	klog.Infof("Sync Done!")
+	//klog.Infof("Sync Done!")
 	s.syncRunner.Run()
 }
 
