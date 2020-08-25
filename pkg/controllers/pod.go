@@ -103,7 +103,7 @@ func (c *PodConfig) Run(stopCh <-chan struct{}) {
 	}
 
 	for i := range c.eventHandlers {
-		klog.V(4).Infof("Calling handler.OnPodSynced()")
+		//klog.V(4).Infof("Calling handler.OnPodSynced()")
 		c.eventHandlers[i].OnPodSynced()
 	}
 }
@@ -309,21 +309,21 @@ func (pct *PodChangeTracker) newPodInfo(pod *v1.Pod) (*PodInfo, error) {
 
 	// netdefname -> plugin name map
 	networkPlugins := make(map[types.NamespacedName]string)
-	if networks == nil {
+	/*if networks == nil {
 		klog.Infof("%s/%s: NO NET", pod.ObjectMeta.Namespace, pod.ObjectMeta.Name)
 	} else {
 		klog.Infof("%s/%s: net: %v", pod.ObjectMeta.Namespace, pod.ObjectMeta.Name, networks)
-	}
+	}*/
 	for _, n := range networks {
 		namespace := pod.ObjectMeta.Namespace
 		if n.Namespace != "" {
 			namespace = n.Namespace
 		}
 		namespacedName := types.NamespacedName{Namespace: namespace, Name: n.Name}
-		klog.Infof("networkPlugins[%s], %v", namespacedName, pct.netdefChanges.GetPluginType(namespacedName))
+		//klog.Infof("networkPlugins[%s], %v", namespacedName, pct.netdefChanges.GetPluginType(namespacedName))
 		networkPlugins[namespacedName] = pct.netdefChanges.GetPluginType(namespacedName)
 	}
-	klog.Infof("netdef->pluginMap: %v", networkPlugins)
+	//klog.Infof("netdef->pluginMap: %v", networkPlugins)
 
 	// match it with
 	var netifs []InterfaceInfo
@@ -351,7 +351,7 @@ func (pct *PodChangeTracker) newPodInfo(pod *v1.Pod) (*PodInfo, error) {
 		}
 	}
 
-	klog.Infof("Pod: %s/%s netns:%s netIF:%v", pod.ObjectMeta.Namespace, pod.ObjectMeta.Name, netnsPath, netifs)
+	//klog.Infof("Pod: %s/%s netns:%s netIF:%v", pod.ObjectMeta.Namespace, pod.ObjectMeta.Name, netnsPath, netifs)
 	info := &PodInfo{
 		Name:          pod.ObjectMeta.Name,
 		Namespace:     pod.ObjectMeta.Namespace,
