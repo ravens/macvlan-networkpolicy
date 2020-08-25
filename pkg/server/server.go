@@ -250,7 +250,7 @@ func NewServer(o *Options) (*Server, error) {
 
 // Sync ...
 func (s *Server) Sync() {
-	klog.Infof("Sync Done!")
+	//klog.Infof("Sync Done!")
 	s.syncRunner.Run()
 }
 
@@ -281,7 +281,7 @@ func (s *Server) OnPodDelete(pod *v1.Pod) {
 
 // OnPodSynced ...
 func (s *Server) OnPodSynced() {
-	klog.Infof("OnPodSynced")
+	//klog.Infof("OnPodSynced")
 	s.mu.Lock()
 	s.podSynced = true
 	s.setInitialized(s.podSynced)
@@ -312,7 +312,7 @@ func (s *Server) OnPolicyDelete(policy *multiv1beta1.MultiNetworkPolicy) {
 
 // OnPolicySynced ...
 func (s *Server) OnPolicySynced() {
-	klog.Infof("OnPolicySynced")
+	//klog.Infof("OnPolicySynced")
 	s.mu.Lock()
 	s.policySynced = true
 	s.setInitialized(s.policySynced)
@@ -345,7 +345,7 @@ func (s *Server) OnNetDefDelete(net *netdefv1.NetworkAttachmentDefinition) {
 
 // OnNetDefSynced ...
 func (s *Server) OnNetDefSynced() {
-	klog.Infof("OnNetDefSynced")
+	//klog.Infof("OnNetDefSynced")
 	s.mu.Lock()
 	s.netdefSynced = true
 	s.setInitialized(s.netdefSynced)
@@ -378,7 +378,7 @@ func (s *Server) OnNamespaceDelete(ns *v1.Namespace) {
 
 // OnNamespaceSynced ...
 func (s *Server) OnNamespaceSynced() {
-	klog.Infof("OnNamespaceSynced")
+	//klog.Infof("OnNamespaceSynced")
 	s.mu.Lock()
 	s.nsSynced = true
 	s.setInitialized(s.nsSynced)
@@ -390,7 +390,7 @@ func (s *Server) OnNamespaceSynced() {
 }
 
 func (s *Server) syncMultiPolicy() {
-	klog.Infof("syncMultiPolicy")
+	//klog.Infof("syncMultiPolicy")
 	s.podMap.Update(s.podChanges)
 	s.policyMap.Update(s.policyChanges)
 
@@ -399,12 +399,12 @@ func (s *Server) syncMultiPolicy() {
 		klog.Errorf("failed to get pods")
 	}
 	for _, p := range pods {
-		klog.Infof("XXX: SYNC %s/%s", p.Namespace, p.Name)
+		//klog.Infof("XXX: SYNC %s/%s", p.Namespace, p.Name)
 		if p.Spec.NodeName == s.Hostname {
 			namespacedName := types.NamespacedName{Namespace: p.Namespace, Name: p.Name}
 			if podInfo, ok := s.podMap[namespacedName]; ok {
 				if len(podInfo.Interfaces) == 0 {
-					klog.Infof("XXX: skipped due to no multi")
+					//klog.Infof("XXX: skipped due to no multi")
 					continue
 				}
 				netnsPath := podInfo.NetNSPath
@@ -418,7 +418,7 @@ func (s *Server) syncMultiPolicy() {
 					continue
 				}
 
-				klog.Infof("XXX: pod: %s/%s %s", p.Namespace, p.Name, netnsPath)
+				//klog.Infof("XXX: pod: %s/%s %s", p.Namespace, p.Name, netnsPath)
 				_ = netns.Do(func(_ ns.NetNS) error {
 					return s.generatePolicyRules(p, podInfo.Interfaces)
 				})
@@ -433,7 +433,7 @@ const (
 )
 
 func (s *Server) generatePolicyRules(pod *v1.Pod, multiIntf []controllers.InterfaceInfo) error {
-	fmt.Fprintf(os.Stderr, "XXX: Generate rules for Pod :%v/%v\n", pod.Namespace, pod.Name)
+	//fmt.Fprintf(os.Stderr, "XXX: Generate rules for Pod :%v/%v\n", pod.Namespace, pod.Name)
 	// -t filter -N MULTI-POLICY-INGRESS # ensure chain
 	s.ip4Tables.EnsureChain(utiliptables.TableFilter, ingressChain)
 	// -t filter -N MULTI-POLICY-EGRESS # ensure chain
