@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -476,7 +475,7 @@ func (s *Server) generatePolicyRules(pod *v1.Pod, multiIntf []controllers.Interf
 				}
 			}
 		}
-		fmt.Fprintf(os.Stderr, "ingress/egress = %v/%v\n", ingressEnable, egressEnable)
+		//fmt.Fprintf(os.Stderr, "ingress/egress = %v/%v\n", ingressEnable, egressEnable)
 
 		iptableBuffer.Reset()
 
